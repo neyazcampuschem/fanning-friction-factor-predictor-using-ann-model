@@ -270,7 +270,7 @@ st.markdown(
     <div class="header-sub-tags">
         Process Modeling<br>
         Machine Learning<br>
-        Fluid Mechanics
+        Transport Phenomena
     </div>
 </div>
 """,
@@ -669,9 +669,6 @@ elif nav_option == "References":
     st.markdown(
         """
     1. **Bird, R. B., Stewart, W. E., & Lightfoot, E. N. (2002).** *Transport Phenomena* (2nd ed.). John Wiley & Sons, New York. ISBN: 0-471-41077-2.
-    2. **Moody, L. F. (1944).** Friction factors for pipe flow. *Transactions of the ASME*, 66(8), 671–684.
-    3. **Haaland, S. E. (1983).** Simple and explicit formulas for the friction factor in turbulent pipe flow. *Journal of Fluids Engineering*, 105(1), 89–90.
-    4. **Colebrook, C. F. (1939).** Turbulent flow in pipes, with particular reference to the transition region between the smooth and rough pipe laws. *Journal of the Institution of Civil Engineers*, 11(4), 133–156.
     """
     )
 
