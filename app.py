@@ -258,18 +258,12 @@ with st.sidebar:
     st.markdown("### 🚰 ANN Friction Factor Predictor")
     st.markdown("---")
 
-    selected_nav = st.radio(
-        "Navigation",
-        options=["Predict", "About", "Theory", "Data & Model", "Contact"],
-        label_visibility="collapsed",
-    )
-
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown("---")
 
     st.markdown(
         """
-        <div style="font-size: 11px; line-height: 1.6;">
+        <div style="font-size: 14px; line-height: 1.6;">
             <p>🎓 <strong>Designed by</strong><br><span style="color:#FFFFFF;">Neyaz Reza</span> (M.Tech Student)</p>
             <p>👤 <strong>Under the Supervision of</strong><br><span style="color:#FFFFFF;">Mr. Mohammad Abdul Hakeem</span><br>(Associate Professor)</p>
             <p>🏛️ <strong>Department of Chemical Engineering</strong><br>Aligarh Muslim University</p>
@@ -516,7 +510,7 @@ with res_left:
         )
 
 with res_right:
-    st.markdown(f"### 🏆 Model Performance ({regime_label})")
+    st.markdown(f"### Model Performance ({regime_label})")
     st.caption("Performance metrics on test data")
 
     m1, m2 = st.columns(2)
@@ -553,7 +547,7 @@ st.info(
 st.markdown(
     """
 <div class="footer-text">
-    © 2025 | ANN Friction Factor Predictor &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; Designed by Neyaz Reza &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; Department of Chemical Engineering, AMU ❤️
+    © 2026 | ANN Friction Factor Predictor &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; Designed by Neyaz Reza &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; Department of Chemical Engineering, AMU ❤️
 </div>
 """,
     unsafe_allow_html=True,
