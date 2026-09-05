@@ -435,8 +435,8 @@ with res_left:
         st.markdown(
             f"""
         <div class="result-box-blue">
-            <small style="color:#1E40AF; font-weight:200;">ANN Predicted</small>
-            <h2 style="color:#1E3A8A; margin: 8px 0;">{predicted_f:.6f}</h2>
+            <small style="color:#1E40AF; font-weight:600;">ANN Predicted</small>
+            <h2 style="color:#1E3A8A; margin: 12px 0;">{predicted_f:.6f}</h2>
             <small style="color:#64748B;">Fanning Friction Factor</small>
         </div>
         """,
@@ -447,8 +447,8 @@ with res_left:
         st.markdown(
             f"""
         <div class="result-box-purple">
-            <small style="color:#5B21B6; font-weight:200;">Actual / Analytical</small>
-            <h2 style="color:#4C1D95; margin: 8px 0;">{actual_f:.6f}</h2>
+            <small style="color:#5B21B6; font-weight:600;">Actual / Analytical</small>
+            <h2 style="color:#4C1D95; margin: 12px 0;">{actual_f:.6f}</h2>
             <small style="color:#64748B;">Reference Value</small>
         </div>
         """,
@@ -459,8 +459,8 @@ with res_left:
         st.markdown(
             f"""
         <div class="result-box-green">
-            <small style="color:#166534; font-weight:200;">Relative Error</small>
-            <h2 style="color:#14532D; margin: 8px 0;">{rel_error:.2f}%</h2>
+            <small style="color:#166534; font-weight:600;">Relative Error</small>
+            <h2 style="color:#14532D; margin: 12px 0;">{rel_error:.2f}%</h2>
             <small style="color:#64748B;">Prediction Accuracy</small>
         </div>
         """,
@@ -476,8 +476,8 @@ with res_right:
         st.markdown(
             f"""
         <div class="metric-box-mae">
-            <small style="color:#991B1B; font-weight:200;">Mean Absolute Error (MAE)</small>
-            <h3 style="color:#7F1D1D; margin: 8px 0;">{cur_m[0]:.6e}</h3>
+            <small style="color:#991B1B; font-weight:600;">Mean Absolute Error (MAE)</small>
+            <h3 style="color:#7F1D1D; margin: 12px 0;">{cur_m[0]:.6e}</h3>
         </div>
         """,
             unsafe_allow_html=True,
@@ -487,8 +487,8 @@ with res_right:
         st.markdown(
             f"""
         <div class="metric-box-mse">
-            <small style="color:#3730A3; font-weight:200;">Mean Squared Error (MSE)</small>
-            <h3 style="color:#312E81; margin: 8px 0;">{cur_m[1]:.6e}</h3>
+            <small style="color:#3730A3; font-weight:600;">Mean Squared Error (MSE)</small>
+            <h3 style="color:#312E81; margin: 12px 0;">{cur_m[1]:.6e}</h3>
         </div>
         """,
             unsafe_allow_html=True,
