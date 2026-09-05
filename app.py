@@ -288,27 +288,6 @@ with col_title:
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# 4 Feature Highlights
-f1, f2, f3, f4 = st.columns(4)
-with f1:
-    st.markdown(
-        '<div class="feature-card">⚡ <div><strong>Fast Prediction</strong><br><small style="color:#64748B;">Instant results</small></div></div>',
-        unsafe_allow_html=True,
-    )
-
-with f3:
-    st.markdown(
-        '<div class="feature-card">🗄️ <div><strong>Multiple Regimes</strong><br><small style="color:#64748B;">Laminar, Turbulent, Rough</small></div></div>',
-        unsafe_allow_html=True,
-    )
-with f4:
-    st.markdown(
-        '<div class="feature-card">⚙️ <div><strong>User Friendly</strong><br><small style="color:#64748B;">Simple & Intuitive Interface</small></div></div>',
-        unsafe_allow_html=True,
-    )
-
-st.markdown("<br>", unsafe_allow_html=True)
-
 # Main Form Container
 st.markdown("### 🎛️ Input Parameters")
 st.caption("Set the flow conditions to predict the Fanning friction factor.")
@@ -456,7 +435,7 @@ with res_left:
         st.markdown(
             f"""
         <div class="result-box-blue">
-            <small style="color:#1E40AF; font-weight:400;">ANN Predicted</small>
+            <small style="color:#1E40AF; font-weight:200;">ANN Predicted</small>
             <h2 style="color:#1E3A8A; margin: 8px 0;">{predicted_f:.6f}</h2>
             <small style="color:#64748B;">Fanning Friction Factor</small>
         </div>
@@ -468,7 +447,7 @@ with res_left:
         st.markdown(
             f"""
         <div class="result-box-purple">
-            <small style="color:#5B21B6; font-weight:400;">Actual / Analytical</small>
+            <small style="color:#5B21B6; font-weight:200;">Actual / Analytical</small>
             <h2 style="color:#4C1D95; margin: 8px 0;">{actual_f:.6f}</h2>
             <small style="color:#64748B;">Reference Value</small>
         </div>
@@ -480,7 +459,7 @@ with res_left:
         st.markdown(
             f"""
         <div class="result-box-green">
-            <small style="color:#166534; font-weight:400;">Relative Error</small>
+            <small style="color:#166534; font-weight:200;">Relative Error</small>
             <h2 style="color:#14532D; margin: 8px 0;">{rel_error:.2f}%</h2>
             <small style="color:#64748B;">Prediction Accuracy</small>
         </div>
@@ -497,8 +476,8 @@ with res_right:
         st.markdown(
             f"""
         <div class="metric-box-mae">
-            <small style="color:#991B1B; font-weight:400;">Mean Absolute Error (MAE)</small>
-            <h3 style="color:#7F1D1D; margin: 12px 0;">{cur_m[0]:.6e}</h3>
+            <small style="color:#991B1B; font-weight:200;">Mean Absolute Error (MAE)</small>
+            <h3 style="color:#7F1D1D; margin: 8px 0;">{cur_m[0]:.6e}</h3>
         </div>
         """,
             unsafe_allow_html=True,
@@ -508,8 +487,8 @@ with res_right:
         st.markdown(
             f"""
         <div class="metric-box-mse">
-            <small style="color:#3730A3; font-weight:400;">Mean Squared Error (MSE)</small>
-            <h3 style="color:#312E81; margin: 12px 0;">{cur_m[1]:.6e}</h3>
+            <small style="color:#3730A3; font-weight:200;">Mean Squared Error (MSE)</small>
+            <h3 style="color:#312E81; margin: 8px 0;">{cur_m[1]:.6e}</h3>
         </div>
         """,
             unsafe_allow_html=True,
