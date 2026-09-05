@@ -286,12 +286,6 @@ with col_title:
         "Predict fluid friction factors using trained Artificial Neural Networks across laminar, turbulent, and rough pipe flow regimes."
     )
 
-with col_badge:
-    st.markdown(
-        '<div class="status-badge">📊 Deployed Model &nbsp;🟢 Online</div>',
-        unsafe_allow_html=True,
-    )
-
 st.markdown("<br>", unsafe_allow_html=True)
 
 # 4 Feature Highlights
@@ -301,11 +295,7 @@ with f1:
         '<div class="feature-card">⚡ <div><strong>Fast Prediction</strong><br><small style="color:#64748B;">Instant results</small></div></div>',
         unsafe_allow_html=True,
     )
-with f2:
-    st.markdown(
-        '<div class="feature-card">🎯 <div><strong>High Accuracy</strong><br><small style="color:#64748B;">Trained on reliable correlations</small></div></div>',
-        unsafe_allow_html=True,
-    )
+
 with f3:
     st.markdown(
         '<div class="feature-card">🗄️ <div><strong>Multiple Regimes</strong><br><small style="color:#64748B;">Laminar, Turbulent, Rough</small></div></div>',
@@ -450,17 +440,6 @@ else:
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# Action Buttons
-btn_col1, btn_col2 = st.columns([3, 1])
-with btn_col1:
-    predict_clicked = st.button(
-        "▶ Predict Friction Factor", use_container_width=True, type="primary"
-    )
-with btn_col2:
-    reset_clicked = st.button("🔄 Reset", use_container_width=True)
-
-st.markdown("<br>", unsafe_allow_html=True)
-
 # Output Calculations
 error = abs(predicted_f - actual_f)
 rel_error = (error / actual_f) * 100
@@ -477,7 +456,7 @@ with res_left:
         st.markdown(
             f"""
         <div class="result-box-blue">
-            <small style="color:#1E40AF; font-weight:600;">ANN Predicted</small>
+            <small style="color:#1E40AF; font-weight:400;">ANN Predicted</small>
             <h2 style="color:#1E3A8A; margin: 8px 0;">{predicted_f:.6f}</h2>
             <small style="color:#64748B;">Fanning Friction Factor</small>
         </div>
@@ -489,7 +468,7 @@ with res_left:
         st.markdown(
             f"""
         <div class="result-box-purple">
-            <small style="color:#5B21B6; font-weight:600;">Actual / Analytical</small>
+            <small style="color:#5B21B6; font-weight:400;">Actual / Analytical</small>
             <h2 style="color:#4C1D95; margin: 8px 0;">{actual_f:.6f}</h2>
             <small style="color:#64748B;">Reference Value</small>
         </div>
@@ -501,7 +480,7 @@ with res_left:
         st.markdown(
             f"""
         <div class="result-box-green">
-            <small style="color:#166534; font-weight:600;">Relative Error</small>
+            <small style="color:#166534; font-weight:400;">Relative Error</small>
             <h2 style="color:#14532D; margin: 8px 0;">{rel_error:.2f}%</h2>
             <small style="color:#64748B;">Prediction Accuracy</small>
         </div>
@@ -518,7 +497,7 @@ with res_right:
         st.markdown(
             f"""
         <div class="metric-box-mae">
-            <small style="color:#991B1B; font-weight:600;">Mean Absolute Error (MAE)</small>
+            <small style="color:#991B1B; font-weight:400;">Mean Absolute Error (MAE)</small>
             <h3 style="color:#7F1D1D; margin: 12px 0;">{cur_m[0]:.6e}</h3>
         </div>
         """,
@@ -529,7 +508,7 @@ with res_right:
         st.markdown(
             f"""
         <div class="metric-box-mse">
-            <small style="color:#3730A3; font-weight:600;">Mean Squared Error (MSE)</small>
+            <small style="color:#3730A3; font-weight:400;">Mean Squared Error (MSE)</small>
             <h3 style="color:#312E81; margin: 12px 0;">{cur_m[1]:.6e}</h3>
         </div>
         """,
@@ -541,14 +520,4 @@ st.markdown("<br>", unsafe_allow_html=True)
 # Note Card
 st.info(
     "ℹ️ **Note:** This tool uses trained Artificial Neural Networks (ANN) to predict the Fanning friction factor for different pipe flow regimes. Ensure input parameters are within the range of the training data for best results."
-)
-
-# Footer
-st.markdown(
-    """
-<div class="footer-text">
-    © 2026 | ANN Friction Factor Predictor &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; Designed by Neyaz Reza &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp; Department of Chemical Engineering, AMU ❤️
-</div>
-""",
-    unsafe_allow_html=True,
 )
