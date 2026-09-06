@@ -246,6 +246,11 @@ if "predicted" not in st.session_state:
     st.session_state.predicted = False
 
 
+def clear_prediction():
+    """Resets predicted state whenever input values change"""
+    st.session_state.predicted = False
+
+
 def reset_inputs():
     st.session_state.status = "Rough"
     st.session_state.re_val = 50000.0
@@ -330,6 +335,7 @@ if nav_option == "Prediction":
             "Pipe Surface Condition",
             options=["Rough", "Smooth"],
             key="status",
+            on_change=clear_prediction,
         )
 
     if status == "Smooth":
@@ -338,6 +344,7 @@ if nav_option == "Prediction":
                 "Flow Regime",
                 options=["Laminar", "Turbulent"],
                 key="flow_type",
+                on_change=clear_prediction,
             )
 
         if flow_type == "Laminar":
@@ -347,6 +354,7 @@ if nav_option == "Prediction":
                     min_value=0.1,
                     max_value=2100.0,
                     key="re_val",
+                    on_change=clear_prediction,
                 )
             with p4:
                 kD = st.number_input(
@@ -355,13 +363,6 @@ if nav_option == "Prediction":
                     format="%.5f",
                     disabled=True,
                 )
-
-            actual_f = 16.0 / re
-            re_sc = scalers["lam_X"].transform([[re]])
-            p_sc = models["laminar"].predict(re_sc, verbose=0)
-            predicted_f = scalers["lam_y"].inverse_transform(p_sc)[0][0]
-            cur_metrics = metrics["laminar"]
-            model_name = "Laminar Model"
 
         else:
             with p3:
@@ -370,6 +371,7 @@ if nav_option == "Prediction":
                     min_value=2100.0,
                     max_value=100000.0,
                     key="re_val",
+                    on_change=clear_prediction,
                 )
             with p4:
                 kD = st.number_input(
@@ -378,13 +380,6 @@ if nav_option == "Prediction":
                     format="%.5f",
                     disabled=True,
                 )
-
-            actual_f = 0.0791 / (re**0.25)
-            re_sc = scalers["tur_X"].transform([[re]])
-            p_sc = models["turbulent"].predict(re_sc, verbose=0)
-            predicted_f = scalers["tur_y"].inverse_transform(p_sc)[0][0]
-            cur_metrics = metrics["turbulent"]
-            model_name = "Turbulent Model"
 
     else:
         with p2:
@@ -398,6 +393,7 @@ if nav_option == "Prediction":
                 min_value=1000.0,
                 max_value=100000000.0,
                 key="re_val",
+                on_change=clear_prediction,
             )
 
         with p4:
@@ -407,17 +403,8 @@ if nav_option == "Prediction":
                 max_value=0.05,
                 format="%.5f",
                 key="kd_val",
+                on_change=clear_prediction,
             )
-
-        term = (6.9 / re) if kD == 0 else ((kD / 3.7) ** 1.11) + (6.9 / re)
-        f_darcy = (1.0 / (-1.8 * np.log10(term))) ** 2
-        actual_f = f_darcy / 16.0
-
-        inp_sc = scalers["haal_X"].transform([[np.log10(re), kD]])
-        p_sc = models["rough"].predict(inp_sc, verbose=0)
-        predicted_f = scalers["haal_y"].inverse_transform(p_sc)[0][0]
-        cur_metrics = metrics["rough"]
-        model_name = "Rough Model"
 
     # Action Buttons
     btn_col1, btn_col2, btn_col3 = st.columns([2, 1, 3])
@@ -433,65 +420,93 @@ if nav_option == "Prediction":
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # Compute Error
-    abs_err = abs(predicted_f - actual_f)
-    rel_err = (abs_err / actual_f) * 100
+    # ONLY Calculate & Display Results when the "Predict" button is clicked
+    if st.session_state.predicted:
+        if status == "Smooth":
+            if flow_type == "Laminar":
+                actual_f = 16.0 / re
+                re_sc = scalers["lam_X"].transform([[re]])
+                p_sc = models["laminar"].predict(re_sc, verbose=0)
+                predicted_f = scalers["lam_y"].inverse_transform(p_sc)[0][0]
+                cur_metrics = metrics["laminar"]
+                model_name = "Laminar Model"
+            else:
+                actual_f = 0.0791 / (re**0.25)
+                re_sc = scalers["tur_X"].transform([[re]])
+                p_sc = models["turbulent"].predict(re_sc, verbose=0)
+                predicted_f = scalers["tur_y"].inverse_transform(p_sc)[0][0]
+                cur_metrics = metrics["turbulent"]
+                model_name = "Turbulent Model"
+        else:
+            term = (6.9 / re) if kD == 0 else ((kD / 3.7) ** 1.11) + (6.9 / re)
+            f_darcy = (1.0 / (-1.8 * np.log10(term))) ** 2
+            actual_f = f_darcy / 16.0
 
-    # Output Side-by-Side Card Layout
-    col_res, col_perf = st.columns(2)
+            inp_sc = scalers["haal_X"].transform([[np.log10(re), kD]])
+            p_sc = models["rough"].predict(inp_sc, verbose=0)
+            predicted_f = scalers["haal_y"].inverse_transform(p_sc)[0][0]
+            cur_metrics = metrics["rough"]
+            model_name = "Rough Model"
 
-    with col_res:
+        # Compute Error
+        abs_err = abs(predicted_f - actual_f)
+        rel_err = (abs_err / actual_f) * 100
+
+        # Output Side-by-Side Card Layout
+        col_res, col_perf = st.columns(2)
+
+        with col_res:
+            st.markdown(
+                """
+            <div style="background-color: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 6px; padding: 12px 16px; margin-bottom: 10px;">
+                <h4 style="margin: 0; color: #166534; font-family: serif;">Prediction Results</h4>
+            </div>
+            """,
+                unsafe_allow_html=True,
+            )
+
+            st.markdown(
+                f"""
+            <table class="styled-table">
+                <tr><th>Quantity</th><th>Value</th></tr>
+                <tr><td>ANN Predicted Fanning Friction Factor (f)</td><td><strong>{predicted_f:.6f}</strong></td></tr>
+                <tr><td>Actual / Analytical Value</td><td><strong>{actual_f:.6f}</strong></td></tr>
+                <tr><td>Relative Error</td><td><strong>{rel_err:.2f} %</strong></td></tr>
+            </table>
+            """,
+                unsafe_allow_html=True,
+            )
+
+        with col_perf:
+            st.markdown(
+                f"""
+            <div style="background-color: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 6px; padding: 12px 16px; margin-bottom: 10px;">
+                <h4 style="margin: 0; color: #1E40AF; font-family: serif;">Model Performance ({model_name})</h4>
+            </div>
+            """,
+                unsafe_allow_html=True,
+            )
+
+            st.markdown(
+                f"""
+            <table class="styled-table">
+                <tr><th>Metric</th><th>Value</th></tr>
+                <tr><td>Mean Absolute Error (MAE)</td><td><strong>{cur_metrics[0]:.6e}</strong></td></tr>
+                <tr><td>Mean Squared Error (MSE)</td><td><strong>{cur_metrics[1]:.6e}</strong></td></tr>
+                <tr><td>Coefficient of Determination (R²)</td><td><strong>{cur_metrics[2]:.4f}</strong></td></tr>
+            </table>
+            """,
+                unsafe_allow_html=True,
+            )
+
         st.markdown(
             """
-        <div style="background-color: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 6px; padding: 12px 16px; margin-bottom: 10px;">
-            <h4 style="margin: 0; color: #166534; font-family: serif;">Prediction Results</h4>
+        <div class="note-box">
+            <strong>Note:</strong> This tool uses trained Artificial Neural Networks (ANN) to predict the Fanning friction factor for laminar, turbulent, and rough pipe flow regimes. Ensure input parameters are within the range of the training data for best results.
         </div>
         """,
             unsafe_allow_html=True,
         )
-
-        st.markdown(
-            f"""
-        <table class="styled-table">
-            <tr><th>Quantity</th><th>Value</th></tr>
-            <tr><td>ANN Predicted Fanning Friction Factor (f)</td><td><strong>{predicted_f:.6f}</strong></td></tr>
-            <tr><td>Actual / Analytical Value</td><td><strong>{actual_f:.6f}</strong></td></tr>
-            <tr><td>Relative Error</td><td><strong>{rel_err:.2f} %</strong></td></tr>
-        </table>
-        """,
-            unsafe_allow_html=True,
-        )
-
-    with col_perf:
-        st.markdown(
-            f"""
-        <div style="background-color: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 6px; padding: 12px 16px; margin-bottom: 10px;">
-            <h4 style="margin: 0; color: #1E40AF; font-family: serif;">Model Performance ({model_name})</h4>
-        </div>
-        """,
-            unsafe_allow_html=True,
-        )
-
-        st.markdown(
-            f"""
-        <table class="styled-table">
-            <tr><th>Metric</th><th>Value</th></tr>
-            <tr><td>Mean Absolute Error (MAE)</td><td><strong>{cur_metrics[0]:.6e}</strong></td></tr>
-            <tr><td>Mean Squared Error (MSE)</td><td><strong>{cur_metrics[1]:.6e}</strong></td></tr>
-            <tr><td>Coefficient of Determination (R²)</td><td><strong>{cur_metrics[2]:.4f}</strong></td></tr>
-        </table>
-        """,
-            unsafe_allow_html=True,
-        )
-
-    st.markdown(
-        """
-    <div class="note-box">
-        <strong>Note:</strong> This tool uses trained Artificial Neural Networks (ANN) to predict the Fanning friction factor for laminar, turbulent, and rough pipe flow regimes. Ensure input parameters are within the range of the training data for best results.
-    </div>
-    """,
-        unsafe_allow_html=True,
-    )
 
 # ==========================================
 # PAGE 2: ABOUT
