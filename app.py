@@ -246,11 +246,6 @@ if "predicted" not in st.session_state:
     st.session_state.predicted = False
 
 
-def clear_prediction():
-    """Resets predicted state whenever input values change"""
-    st.session_state.predicted = False
-
-
 def reset_inputs():
     st.session_state.status = "Rough"
     st.session_state.re_val = 50000.0
@@ -328,99 +323,94 @@ if nav_option == "Prediction":
         unsafe_allow_html=True,
     )
 
-    p1, p2, p3, p4 = st.columns(4)
+    # Wrap inputs inside a form so press-Enter does not trigger computation
+    with st.form(key="prediction_form"):
+        p1, p2, p3, p4 = st.columns(4)
 
-    with p1:
-        status = st.selectbox(
-            "Pipe Surface Condition",
-            options=["Rough", "Smooth"],
-            key="status",
-            on_change=clear_prediction,
-        )
-
-    if status == "Smooth":
-        with p2:
-            flow_type = st.selectbox(
-                "Flow Regime",
-                options=["Laminar", "Turbulent"],
-                key="flow_type",
-                on_change=clear_prediction,
+        with p1:
+            status = st.selectbox(
+                "Pipe Regime",
+                options=["Rough", "Smooth"],
+                key="status",
             )
 
-        if flow_type == "Laminar":
-            with p3:
-                re = st.number_input(
-                    "Reynolds Number (Re)",
-                    min_value=0.1,
-                    max_value=2100.0,
-                    key="re_val",
-                    on_change=clear_prediction,
-                )
-            with p4:
-                kD = st.number_input(
-                    "Relative Roughness (k/D)",
-                    value=0.00000,
-                    format="%.5f",
-                    disabled=True,
+        if status == "Smooth":
+            with p2:
+                flow_type = st.selectbox(
+                    "Flow Regime",
+                    options=["Laminar", "Turbulent"],
+                    key="flow_type",
                 )
 
+            if flow_type == "Laminar":
+                with p3:
+                    re = st.number_input(
+                        "Reynolds Number",
+                        min_value=0.1,
+                        max_value=2100.0,
+                        key="re_val",
+                    )
+                with p4:
+                    kD = st.number_input(
+                        "Relative Roughness (k/D)",
+                        value=0.00000,
+                        format="%.5f",
+                        disabled=True,
+                    )
+            else:
+                with p3:
+                    re = st.number_input(
+                        "Reynolds Number",
+                        min_value=2100.0,
+                        max_value=100000.0,
+                        key="re_val",
+                    )
+                with p4:
+                    kD = st.number_input(
+                        "Relative Roughness (k/D)",
+                        value=0.00000,
+                        format="%.5f",
+                        disabled=True,
+                    )
         else:
+            with p2:
+                st.text_input(
+                    "Flow Regime", value="Turbulent (Rough)", disabled=True
+                )
+
             with p3:
                 re = st.number_input(
-                    "Reynolds Number (Re)",
-                    min_value=2100.0,
-                    max_value=100000.0,
+                    "Reynolds Number",
+                    min_value=1000.0,
+                    max_value=100000000.0,
                     key="re_val",
-                    on_change=clear_prediction,
                 )
+
             with p4:
                 kD = st.number_input(
                     "Relative Roughness (k/D)",
-                    value=0.00000,
+                    min_value=0.0,
+                    max_value=0.05,
                     format="%.5f",
-                    disabled=True,
+                    key="kd_val",
                 )
 
-    else:
-        with p2:
-            st.text_input(
-                "Flow Regime", value="Turbulent (Rough)", disabled=True
+        btn_col1, btn_col2, btn_col3 = st.columns([2, 1, 3])
+        with btn_col1:
+            predict_submitted = st.form_submit_button(
+                "Predict", type="primary", use_container_width=True
             )
 
-        with p3:
-            re = st.number_input(
-                "Reynolds Number (Re)",
-                min_value=1000.0,
-                max_value=100000000.0,
-                key="re_val",
-                on_change=clear_prediction,
-            )
-
-        with p4:
-            kD = st.number_input(
-                "Relative Roughness (k/D)",
-                min_value=0.0,
-                max_value=0.05,
-                format="%.5f",
-                key="kd_val",
-                on_change=clear_prediction,
-            )
-
-    # Action Buttons
-    btn_col1, btn_col2, btn_col3 = st.columns([2, 1, 3])
-    with btn_col1:
-        if st.button(
-            "Predict", type="primary", use_container_width=True
-        ):
-            st.session_state.predicted = True
+    # Reset button placed outside the form
     with btn_col2:
-        st.button(
-            "Reset", on_click=reset_inputs, use_container_width=True
-        )
+        st.button("Reset", on_click=reset_inputs, use_container_width=True)
+
+    if predict_submitted:
+        st.session_state.predicted = True
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # ONLY Calculate & Display Results when the "Predict" button is clicked
+    # RESULTS DISPLAY SECTION (Shows ONLY after hitting "Predict")
     if st.session_state.predicted:
         if status == "Smooth":
             if flow_type == "Laminar":
@@ -448,11 +438,9 @@ if nav_option == "Prediction":
             cur_metrics = metrics["rough"]
             model_name = "Rough Model"
 
-        # Compute Error
         abs_err = abs(predicted_f - actual_f)
         rel_err = (abs_err / actual_f) * 100
 
-        # Output Side-by-Side Card Layout
         col_res, col_perf = st.columns(2)
 
         with col_res:
@@ -617,7 +605,6 @@ elif nav_option == "Theory & Methodology":
         st.latex(r"f_F = \frac{f_D}{4}")
 
     with col_m2:
-        # Generate inline SVG diagram representing Moody diagram
         st.markdown(
             """
         <div style="background-color:#FFFFFF; border:1px solid #CBD5E1; padding:15px; border-radius:6px; text-align:center;">
