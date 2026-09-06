@@ -247,7 +247,7 @@ if "predicted" not in st.session_state:
 
 
 def clear_prediction():
-    """Resets predicted state whenever input values change"""
+    """Resets prediction visibility when input settings change"""
     st.session_state.predicted = False
 
 
@@ -332,7 +332,7 @@ if nav_option == "Prediction":
 
     with p1:
         status = st.selectbox(
-            "Pipe Surface Condition",
+            "Pipe Regime",
             options=["Rough", "Smooth"],
             key="status",
             on_change=clear_prediction,
@@ -350,7 +350,7 @@ if nav_option == "Prediction":
         if flow_type == "Laminar":
             with p3:
                 re = st.number_input(
-                    "Reynolds Number (Re)",
+                    "Reynolds Number",
                     min_value=0.1,
                     max_value=2100.0,
                     key="re_val",
@@ -367,7 +367,7 @@ if nav_option == "Prediction":
         else:
             with p3:
                 re = st.number_input(
-                    "Reynolds Number (Re)",
+                    "Reynolds Number",
                     min_value=2100.0,
                     max_value=100000.0,
                     key="re_val",
@@ -389,7 +389,7 @@ if nav_option == "Prediction":
 
         with p3:
             re = st.number_input(
-                "Reynolds Number (Re)",
+                "Reynolds Number",
                 min_value=1000.0,
                 max_value=100000000.0,
                 key="re_val",
@@ -413,14 +413,13 @@ if nav_option == "Prediction":
             "Predict", type="primary", use_container_width=True
         ):
             st.session_state.predicted = True
+
     with btn_col2:
-        st.button(
-            "Reset", on_click=reset_inputs, use_container_width=True
-        )
+        st.button("Reset", on_click=reset_inputs, use_container_width=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # ONLY Calculate & Display Results when the "Predict" button is clicked
+    # Only show prediction results after Predict button click
     if st.session_state.predicted:
         if status == "Smooth":
             if flow_type == "Laminar":
@@ -448,11 +447,9 @@ if nav_option == "Prediction":
             cur_metrics = metrics["rough"]
             model_name = "Rough Model"
 
-        # Compute Error
         abs_err = abs(predicted_f - actual_f)
         rel_err = (abs_err / actual_f) * 100
 
-        # Output Side-by-Side Card Layout
         col_res, col_perf = st.columns(2)
 
         with col_res:
@@ -617,7 +614,6 @@ elif nav_option == "Theory & Methodology":
         st.latex(r"f_F = \frac{f_D}{4}")
 
     with col_m2:
-        # Generate inline SVG diagram representing Moody diagram
         st.markdown(
             """
         <div style="background-color:#FFFFFF; border:1px solid #CBD5E1; padding:15px; border-radius:6px; text-align:center;">
