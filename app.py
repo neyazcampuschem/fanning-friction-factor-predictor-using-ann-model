@@ -323,7 +323,7 @@ if nav_option == "Prediction":
         unsafe_allow_html=True,
     )
 
-    # Wrap inputs inside a form so press-Enter does not trigger computation
+    # 1. Inputs Form Block
     with st.form(key="prediction_form"):
         p1, p2, p3, p4 = st.columns(4)
 
@@ -395,22 +395,22 @@ if nav_option == "Prediction":
                     key="kd_val",
                 )
 
-        btn_col1, btn_col2, btn_col3 = st.columns([2, 1, 3])
-        with btn_col1:
-            predict_submitted = st.form_submit_button(
-                "Predict", type="primary", use_container_width=True
-            )
+        predict_submitted = st.form_submit_button(
+            "Predict", type="primary", use_container_width=True
+        )
 
-    # Reset button placed outside the form
+    # 2. Action Buttons Outside Form
+    btn_col1, btn_col2, btn_col3 = st.columns([2, 1, 3])
+    with btn_col1:
+        if predict_submitted:
+            st.session_state.predicted = True
+
     with btn_col2:
         st.button("Reset", on_click=reset_inputs, use_container_width=True)
 
-    if predict_submitted:
-        st.session_state.predicted = True
-
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # RESULTS DISPLAY SECTION (Shows ONLY after hitting "Predict")
+    # 3. Results Section (Only displays after clicking "Predict")
     if st.session_state.predicted:
         if status == "Smooth":
             if flow_type == "Laminar":
