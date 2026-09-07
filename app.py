@@ -485,14 +485,14 @@ if nav_option == "Prediction":
         with p4:
             kD = st.number_input(
                 "Relative Roughness (k/D)",
-                min_value=0.0000,
+                min_value=0.0001,
                 max_value=0.004,
                 format="%.4f",
                 key="kd_val",
                 on_change=clear_prediction,
             )
             st.markdown(
-                render_limit_badge("0.0000 to 0.004"),
+                render_limit_badge("0.0001 to 0.004"),
                 unsafe_allow_html=True,
             )
 
