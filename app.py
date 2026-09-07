@@ -377,6 +377,13 @@ if nav_option == "Prediction":
 
     p1, p2, p3, p4 = st.columns(4)
 
+    def render_limit_badge(limit_text):
+        return f"""
+        <div style="margin-top: 4px; font-size: 12px; font-weight: 700; color: #0F172A; background-color: #E2E8F0; padding: 4px 8px; border-radius: 4px; display: inline-block;">
+            📍 <strong>Range:</strong> {limit_text}
+        </div>
+        """
+
     with p1:
         status = st.selectbox(
             "Pipe Regime",
@@ -384,7 +391,9 @@ if nav_option == "Prediction":
             key="status",
             on_change=clear_prediction,
         )
-        st.caption("📍 **Range:** Rough / Smooth")
+        st.markdown(
+            render_limit_badge("Rough / Smooth"), unsafe_allow_html=True
+        )
 
     if status == "Smooth":
         with p2:
@@ -394,7 +403,10 @@ if nav_option == "Prediction":
                 key="flow_type",
                 on_change=clear_prediction,
             )
-            st.caption("📍 **Range:** Laminar / Turbulent")
+            st.markdown(
+                render_limit_badge("Laminar / Turbulent"),
+                unsafe_allow_html=True,
+            )
 
         if flow_type == "Laminar":
             with p3:
@@ -405,7 +417,9 @@ if nav_option == "Prediction":
                     key="re_val",
                     on_change=clear_prediction,
                 )
-                st.caption("📍 **Range:** 0.1 to 2,100")
+                st.markdown(
+                    render_limit_badge("0.1 to 2,100"), unsafe_allow_html=True
+                )
 
             with p4:
                 kD = st.number_input(
@@ -414,7 +428,10 @@ if nav_option == "Prediction":
                     format="%.5f",
                     disabled=True,
                 )
-                st.caption("📍 **Range:** 0.00000 (Smooth)")
+                st.markdown(
+                    render_limit_badge("0.00000 (Fixed)"),
+                    unsafe_allow_html=True,
+                )
 
         else:
             with p3:
@@ -425,7 +442,10 @@ if nav_option == "Prediction":
                     key="re_val",
                     on_change=clear_prediction,
                 )
-                st.caption("📍 **Range:** 2,100 to 100,000")
+                st.markdown(
+                    render_limit_badge("2,100 to 100,000"),
+                    unsafe_allow_html=True,
+                )
 
             with p4:
                 kD = st.number_input(
@@ -434,14 +454,20 @@ if nav_option == "Prediction":
                     format="%.5f",
                     disabled=True,
                 )
-                st.caption("📍 **Range:** 0.00000 (Smooth)")
+                st.markdown(
+                    render_limit_badge("0.00000 (Fixed)"),
+                    unsafe_allow_html=True,
+                )
 
     else:
         with p2:
             st.text_input(
                 "Flow Regime", value="Turbulent (Rough)", disabled=True
             )
-            st.caption("📍 **Range:** Turbulent (Fixed)")
+            st.markdown(
+                render_limit_badge("Turbulent (Fixed)"),
+                unsafe_allow_html=True,
+            )
 
         with p3:
             re = st.number_input(
@@ -451,7 +477,10 @@ if nav_option == "Prediction":
                 key="re_val",
                 on_change=clear_prediction,
             )
-            st.caption("📍 **Range:** 1,000 to 100,000,000")
+            st.markdown(
+                render_limit_badge("1,000 to 100,000,000"),
+                unsafe_allow_html=True,
+            )
 
         with p4:
             kD = st.number_input(
@@ -462,20 +491,10 @@ if nav_option == "Prediction":
                 key="kd_val",
                 on_change=clear_prediction,
             )
-            st.caption("📍 **Range:** 0.00000 to 0.05000")
-
-    # Action Buttons
-    btn_col1, btn_col2, btn_col3 = st.columns([2, 1, 3])
-    with btn_col1:
-        if st.button(
-            "Predict", type="primary", use_container_width=True
-        ):
-            st.session_state.predicted = True
-
-    with btn_col2:
-        st.button("Reset", on_click=reset_inputs, use_container_width=True)
-
-    st.markdown("<br>", unsafe_allow_html=True)
+            st.markdown(
+                render_limit_badge("0.00000 to 0.05000"),
+                unsafe_allow_html=True,
+            )
 
 # ==========================================
 # PAGE 2: ABOUT
