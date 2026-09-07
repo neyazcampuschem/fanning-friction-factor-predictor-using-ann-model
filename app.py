@@ -76,6 +76,53 @@ st.markdown(
         margin-bottom: 20px;
     }
     
+    /* ========================================================= */
+    /* FIX FOR INPUT LABELS, SELECTBOXES, AND NUMBER INPUT VISIBILITY */
+    /* ========================================================= */
+    
+    /* Force Input Labels to be dark and visible */
+    div[data-widget="selectbox"] label, 
+    div[data-widget="number_input"] label, 
+    div[data-widget="text_input"] label,
+    .stNumberInput label, 
+    .stSelectbox label, 
+    .stTextInput label {
+        color: #0F172A !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+    }
+
+    /* Input Field Background & Text Styling */
+    div[data-baseweb="select"] > div, 
+    div[data-baseweb="input"] > div {
+        background-color: #FFFFFF !important;
+        color: #0F172A !important;
+        border: 1px solid #94A3B8 !important;
+        border-radius: 6px !important;
+    }
+
+    /* Text inside Selectbox and Number Input fields */
+    div[data-baseweb="select"] * , 
+    div[data-baseweb="input"] input {
+        color: #0F172A !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+    }
+
+    /* Dropdown menu background & items */
+    div[data-baseweb="popover"] ul {
+        background-color: #FFFFFF !important;
+    }
+    div[data-baseweb="popover"] li {
+        color: #0F172A !important;
+    }
+
+    /* Disabled field styling */
+    input:disabled {
+        background-color: #E2E8F0 !important;
+        color: #64748B !important;
+    }
+    
     /* Table Result Styling */
     .styled-table {
         width: 100%;
