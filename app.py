@@ -321,8 +321,8 @@ if nav_option == "Prediction":
     st.markdown(
         """
     <div class="input-card">
-        <h3 style="margin-top:0; color:#0F172A; font-family:serif;">Input Parameters</h3>
-        <p style="font-size:13px; color:#475569; margin-bottom:15px;">Provide the flow conditions to predict the Fanning friction factor.</p>
+        <h3 style="margin-top:0; color:#0F170A; font-family:serif;">Input Parameters</h3>
+        <p style="font-size:13px; color:#475570; margin-bottom:15px;">Provide the flow conditions to predict the Fanning friction factor.</p>
     </div>
     """,
         unsafe_allow_html=True,
