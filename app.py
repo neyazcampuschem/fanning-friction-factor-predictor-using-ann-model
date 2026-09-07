@@ -412,24 +412,24 @@ if nav_option == "Prediction":
             with p3:
                 re = st.number_input(
                     "Reynolds Number",
-                    min_value=0.1,
+                    min_value=50.0,
                     max_value=2100.0,
                     key="re_val",
                     on_change=clear_prediction,
                 )
                 st.markdown(
-                    render_limit_badge("0.1 to 2,100"), unsafe_allow_html=True
+                    render_limit_badge("50.0 to 2,100"), unsafe_allow_html=True
                 )
 
             with p4:
                 kD = st.number_input(
                     "Relative Roughness (k/D)",
-                    value=0.00000,
-                    format="%.5f",
+                    value=0.0000,
+                    format="%.4f",
                     disabled=True,
                 )
                 st.markdown(
-                    render_limit_badge("0.00000 (Fixed)"),
+                    render_limit_badge("0.0000 (Fixed)"),
                     unsafe_allow_html=True,
                 )
 
@@ -450,12 +450,12 @@ if nav_option == "Prediction":
             with p4:
                 kD = st.number_input(
                     "Relative Roughness (k/D)",
-                    value=0.00000,
-                    format="%.5f",
+                    value=0.0000,
+                    format="%.4f",
                     disabled=True,
                 )
                 st.markdown(
-                    render_limit_badge("0.00000 (Fixed)"),
+                    render_limit_badge("0.0000 (Fixed)"),
                     unsafe_allow_html=True,
                 )
 
@@ -472,27 +472,27 @@ if nav_option == "Prediction":
         with p3:
             re = st.number_input(
                 "Reynolds Number",
-                min_value=1000.0,
+                min_value=10000.0,
                 max_value=100000000.0,
                 key="re_val",
                 on_change=clear_prediction,
             )
             st.markdown(
-                render_limit_badge("1,000 to 100,000,000"),
+                render_limit_badge("10^4 to 10^8"),
                 unsafe_allow_html=True,
             )
 
         with p4:
             kD = st.number_input(
                 "Relative Roughness (k/D)",
-                min_value=0.0,
-                max_value=0.05,
-                format="%.5f",
+                min_value=0.0000,
+                max_value=0.004,
+                format="%.4f",
                 key="kd_val",
                 on_change=clear_prediction,
             )
             st.markdown(
-                render_limit_badge("0.00000 to 0.05000"),
+                render_limit_badge("0.0000 to 0.004"),
                 unsafe_allow_html=True,
             )
 
